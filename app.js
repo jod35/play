@@ -3,27 +3,43 @@ const express= require('express');
 const app =express();
 const port = process.env.PORT||3000
 
+
+app.use(express.urlencoded());
+
+
 //first route (homepage)
 app.get('/',(req,res)=>{
-    res.send("Homepage");
+    console.log(req.headers);
+    res.redirect('/about',200);
 });
+
 
 app.get("/about",(req,res)=>{
    res.send("About Page");
 });
 
+
+app.get('/capital/:name',(req,res)=>{
+  res.send(req.params.name.toUpperCase());
+});
+
 app.get('/hello',(req,res)=>{
-    res.send("Hello "+req.query)
+    for(const key in req.query){
+        console.log(req.query[key]);
+    }
+});
+
+app.post('/form',(req,res)=>{
+
+});
+
+
+app.use((req,res)=>{
+ res.sendStatus(404);
 });
 
 app.use((req,res)=>{
-   res.status(404);
-   res.send("404 Not Found");
-});
-
-app.use((req,res)=>{
-   res.status(500);
-   res.send("500 Internal Server Error");
+  res.sendStatus(500);
 });
 
 app.listen(port,()=>{
